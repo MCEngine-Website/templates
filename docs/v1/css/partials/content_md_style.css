@@ -1,0 +1,71 @@
+/* Container content */
+.markdown-body {
+  font-family: sans-serif;
+  line-height: 1.6;
+}
+
+/* Code block container */
+.markdown-body pre {
+  position: relative;
+  background: #1e1e1e;
+  padding: 1em;
+  overflow-x: auto;
+  border-radius: 6px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border: 1px solid #444;
+}
+
+/* Code text */
+.markdown-body code {
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.95em;
+  color: #d4d4d4;
+  background-color: #1e1e1e;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  white-space: pre;
+}
+
+/* Copy button styles */
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 64px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #fff;
+  border: none;
+  font-size: 0.85em;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 0 0 1px #0005;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+}
+
+/* Optional: Specific language styles */
+code.language-cmd {
+  color: #9cdcfe;
+}
+
+code.language-js {
+  color: #ce9178;
+}
+
+code.language-html {
+  color: #d4d4aa;
+}
+
+code.language-css {
+  color: #c586c0;
+}

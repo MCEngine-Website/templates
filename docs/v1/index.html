@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Markdown Loader Explanation</title>
+
+  <!-- 
+    This is a self-contained index.html file that *explains* how to dynamically
+    load and style Markdown files with JavaScript.
+
+    It includes inline comments and no actual Markdown loading at runtime.
+    It's meant for learning, not live use.
+  -->
+
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: monospace;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    pre {
+      background: #1e1e1e;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    code {
+      color: #cddc39;
+      display: block;
+    }
+
+    h1, h2 {
+      color: #ffffff;
+    }
+
+    a {
+      color: #90caf9;
+    }
+
+    .comment {
+      color: #9e9e9e;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Explaining the Markdown Loader Script</h1>
+  <p>This page exists to <strong>explain how a dynamic markdown loader works</strong>. It does not execute the code, only documents it.</p>
+
+  <h2>1. Load CSS Dynamically</h2>
+  <pre><code><span class="comment">// Immediately-invoked function to load a stylesheet</span>
+(function loadMarkdownCSS() {
+  <span class="comment">// Get current script element</span>
+  const currentScript = document.currentScript || (function () {
+    const scripts = document.getElementsByTagName('script');
+    return scripts[scripts.length - 1];
+  })();
+
+  <span class="comment">// Get the script directory path</span>
+  const scriptDir = currentScript.src.substring(0, currentScript.src.lastIndexOf('/'));
+
+  <span class="comment">// Point to CSS file relative to script</span>
+  const cssPath = scriptDir + '/../css/partials/content_md_style.css';
+
+  <span class="comment">// Create & inject a link tag</span>
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = cssPath;
+  link.type = 'text/css';
+
+  link.onload = () => console.log('Markdown CSS loaded');
+  link.onerror = () => console.error('Failed to load Markdown CSS at', cssPath);
+
+  document.head.appendChild(link);
+})();
+</code></pre>
+
+  <h2>2. Load Markdown Files Dynamically</h2>
+  <pre><code><span class="comment">// Async function to load and display markdown files</span>
+async function loadMarkdownFiles(folderPath, containerId, fileList) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  for (const file of fileList) {
+    try {
+      const res = await fetch(folderPath + file);
+      const md = await res.text();
+
+      const section = document.createElement('div');
+      section.className = 'box';
+      section.style.marginBottom = '1rem';
+
+      const body = document.createElement('div');
+      body.className = 'markdown-body';
+      body.innerHTML = marked.parse(md);
+
+      <span class="comment">// Add copy buttons to code blocks</span>
+      const preBlocks = body.querySelectorAll('pre');
+      preBlocks.forEach(pre => {
+        const code = pre.querySelector('code');
+        if (!code) return;
+
+        const button = document.createElement('button');
+        button.textContent = 'Copy';
+        button.className = 'copy-btn';
+
+        button.addEventListener('click', () => {
+          navigator.clipboard.writeText(code.textContent)
+            .then(() => {
+              button.textContent = 'Copied!';
+              setTimeout(() => button.textContent = 'Copy', 1500);
+            })
+            .catch(err => {
+              console.error('Copy failed:', err);
+              button.textContent = 'Error';
+              setTimeout(() => button.textContent = 'Copy', 1500);
+            });
+        });
+
+        pre.appendChild(button);
+      });
+
+      section.appendChild(body);
+      container.appendChild(section);
+    } catch (err) {
+      console.error(`Failed to load ${file}:`, err);
+    }
+  }
+}
+</code></pre>
+
+  <div class="section">
+    <h2>3. Example HTML Structure</h2>
+    <p>This is how a project might structure the HTML page to use the markdown loader:</p>
+
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;title&gt;My Markdown Viewer&lt;/title&gt;
+
+  &lt;!-- Include marked.js for Markdown parsing --&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"&gt;&lt;/script&gt;
+
+  &lt;!-- Optionally include your own CSS or let the loader pull it --&gt;
+  &lt;link rel="stylesheet" href="css/dark-markdown-theme.css" /&gt;
+
+  &lt;!-- Include the markdown loader script --&gt;
+  &lt;script src="https://mcengine-website.github.io/templates/v1/scripts/markdown-loader.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;!-- The container where markdown content will be injected --&gt;
+  &lt;div id="markdown-container"&gt;&lt;/div&gt;
+
+  &lt;script&gt;
+    <span class="comment">// Example: trigger loading markdown files (this will run on page load)</span>
+    loadMarkdownFiles('contents/', 'markdown-container', [
+      'intro.md',
+      'guide.md',
+      'api.md'
+    ]);
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>4. Required File Structure</h2>
+    <p>The example above assumes a project structure like this:</p>
+    <pre><code>/
+├── index.html
+├── js/
+│   └── markdown-loader.js   <span class="comment">// Contains the loader script</span>
+├── css/
+│   └── dark-markdown-theme.css <span class="comment">// Optional: can be loaded dynamically</span>
+└── contents/
+    ├── intro.md
+    ├── guide.md
+    └── api.md
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>5. What You Need to Do</h2>
+    <ul>
+      <li>Place your Markdown files in a folder (e.g. <code>/contents</code>).</li>
+      <li>Use <code>loadMarkdownFiles(folder, containerId, filesArray)</code> to load them.</li>
+      <li>Make sure <code>marked.js</code> is loaded (from CDN or locally).</li>
+      <li>Style the Markdown either manually, or by letting the script add a stylesheet.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6. Summary</h2>
+    <p>This HTML page acts as a <strong>teaching guide</strong> — it explains how the loader works and how you'd use it, but doesn’t actually load anything. It's safe to include in documentation or tutorials.</p>
+  </div>
+</body>
+</html>
