@@ -11,11 +11,18 @@
   position: relative;
   background: #1e1e1e;
   padding: 1em;
-  overflow-x: auto;
   border-radius: 6px;
   margin-top: 1em;
   margin-bottom: 1em;
   border: 1px solid #444;
+  overflow: hidden; /* Prevent scroll bar from affecting copy button */
+}
+
+/* Inner scroll container for code */
+.markdown-body pre > code {
+  display: block;
+  overflow-x: auto;
+  padding-right: 4em; /* Space for copy button */
 }
 
 /* Code text */
@@ -27,18 +34,15 @@
   padding: 0.2em 0.4em;
   border-radius: 4px;
   white-space: pre;
-  display: inline-block;
-  min-width: 100%;
   box-sizing: border-box;
 }
 
 /* Copy button styles */
 .copy-btn {
   position: absolute;
-  top: 0;
-  right: 0;
-  margin: 8px;
-  z-index: 1;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
   width: 64px;
   height: 32px;
   display: flex;
@@ -54,7 +58,6 @@
   opacity: 0.75;
   transition: opacity 0.2s ease;
   box-shadow: 0 0 0 1px #0005;
-  pointer-events: auto;
 }
 
 .copy-btn:hover {
