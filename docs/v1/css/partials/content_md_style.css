@@ -80,3 +80,11 @@ code.language-html {
 code.language-css {
   color: #c586c0;
 }
+
+.markdown-body pre > code {
+  background-color: #2b2b2b;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 1em;
+  margin-top: 0.5em;
+}
