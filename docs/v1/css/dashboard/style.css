@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+/* Dashboard layout wrapper */
+.dashboard-wrapper {
+  padding: 1rem;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.layout {
+  display: flex;
+  height: 100%;
+  gap: 1rem; /* Space between sidebar and content */
+}
+
+.dashboard {
+  display: flex;
+  height: 100%;
+  gap: 1rem; /* Space between sidebar and main content */
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content-header {
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #64b5f6;
+}
+
+.content-body {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.6;
+  padding-right: 0.5rem;
+}
+
+/* Scrollbar styling */
+.content-body::-webkit-scrollbar {
+  width: 8px;
+}
+.content-body::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+.content-body::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 4px;
+}
+.content-body::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
